@@ -1,0 +1,55 @@
+{
+  "name": "moleculer-db-adapter-scylla",
+  "version": "1.0.0",
+  "description": "ScyllaDB adapter for Moleculer DB service.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon examples/index.js",
+    "ci": "jest --watch",
+    "test": "jest --coverage",
+    "lint": "eslint --ext=.js src test",
+    "deps": "npm-check -u",
+    "readme": "node node_modules/moleculer-docgen/index.js -t README.md src/index.js"
+  },
+  "keywords": [
+    "microservice",
+    "moleculer",
+    "scylladb"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azita-abdollahi/moleculer-db-adapter-scylla.git"
+  },
+  "homepage": "https://github.com/azita-abdollahi/moleculer-db-adapter-scylla#readme",
+  "author": "Azita Abdollahi",
+  "license": "MIT",
+  "peerDependencies": {
+    "moleculer": "^0.14.0 || ^0.15.0 || ^0.16.0"
+  },
+  "devDependencies": {
+    "benchmarkify": "^4.0.0",
+    "eslint": "^9.9.0",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "lolex": "^6.0.0",
+    "moleculer": "^0.14.34",
+    "moleculer-docgen": "^0.3.0",
+    "nodemon": "^3.1.4",
+    "npm-check": "^6.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/services/"
+    ]
+  },
+  "engines": {
+    "node": ">= 10.x.x"
+  },
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "express-cassandra": "^2.9.1",
+    "lodash": "^4.17.21"
+  }
+}
