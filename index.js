@@ -1,6 +1,6 @@
 /*
- * moleculer-db-adapter-scylladb
- * Copyright (c) 2024 Azita-Abdollahi (https://github.com/mrkutin/moleculer-db-adapter-scylladb)
+ * moleculer-db-adapter-scylla
+ * Copyright (c) 2024 Azita  Abdollahi (https://github.com/azita-abdollahi/moleculer-db-adapter-scylla)
  * MIT Licensed
  */
 "use strict";
