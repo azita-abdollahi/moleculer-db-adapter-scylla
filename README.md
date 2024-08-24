@@ -39,6 +39,13 @@ const scyllaOptions = {
     localDataCenter: "datacenter1",
     keyspace: "test",
     authProvider: { username: "cassandra", password: "cassandra" },
+    ormOptions: {
+        defaultReplicationStrategy: {
+            class: 'SimpleStrategy',
+            replication_factor: 1
+        },
+        migration: 'safe'
+    }
 };
 
 const adapter = new ScyllaDbAdapter(scyllaOptions);
@@ -75,6 +82,13 @@ const scyllaOptions = {
     localDataCenter: "datacenter1",
     keyspace: "test",
     authProvider: { username: "cassandra", password: "cassandra" },
+    ormOptions: {
+        defaultReplicationStrategy: {
+            class: 'SimpleStrategy',
+            replication_factor: 1
+        },
+        migration: 'safe'
+    }
 };
 
 const adapter = new ScyllaDbAdapter(scyllaOptions);
