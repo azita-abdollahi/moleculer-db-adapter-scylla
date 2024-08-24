@@ -31,6 +31,7 @@ $ npm install moleculer-db moleculer-db-adapter-scylla --save
 
  ```javascript
 const { ServiceBroker } = require("moleculer");
+const DbService = require("moleculer-db");
 const ScyllaDbAdapter = require("moleculer-db-adapter-scylla");
 const users = require('./users.model'); // Import your model
 
