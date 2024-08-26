@@ -33,6 +33,7 @@
     "jest-cli": "^29.7.0",
     "lolex": "^6.0.0",
     "moleculer": "^0.14.34",
+    "moleculer-db": "0.8.26",
     "moleculer-docgen": "^0.3.0",
     "nodemon": "^3.1.4",
     "npm-check": "^6.0.1"
@@ -48,7 +49,6 @@
     "node": ">= 14.x.x"
   },
   "dependencies": {
-    "bluebird": "^3.7.2",
     "express-cassandra": "^2.9.1",
     "lodash": "^4.17.21"
   }

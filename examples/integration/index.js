@@ -1,11 +1,10 @@
 "use strict";
 
 const { ServiceBroker } = require("moleculer");
-const StoreService = require("../../../moleculer-db/index");
-const ScyllaAdapter = require("../../src/index");
+const StoreService = require("moleculer-db"); 
+const ScyllaAdapter = require("../../src/index"); 
 const UserModel = require("../models/users");
-const ModuleChecker = require("../../../moleculer-db/test/checker");
-const Promise = require("bluebird");
+const ModuleChecker = require("moleculer-db/test/checker"); 
 
 // Create broker
 const broker = new ServiceBroker({
@@ -41,21 +40,21 @@ broker.createService(StoreService, {
         return this.adapter.clear().then(() => start());
     },
     settings: {
-		fields: ["id", "username", "password", "age", "createdAt", "updatedAt"]
-	},
+        fields: ["id", "username", "password", "age", "createdAt", "updatedAt"]
+    },
 });
-
 
 const checker = new ModuleChecker(7);
 
 // Start checks
 function start() {
-    Promise.resolve()
-        .delay(500)
-        .then(() => checker.execute())
-        .catch(console.error)
-        .then(() => broker.stop())
-        .then(() => checker.printTotal());
+    // Delay to allow for connection
+    setTimeout(() => {
+        checker.execute()
+            .catch(console.error)
+            .then(() => broker.stop())
+            .then(() => checker.printTotal());
+    }, 500);
 }
 
 // --- TEST CASES ---
@@ -70,21 +69,21 @@ checker.add("COUNT", () => broker.call("user.count"), res => {
 
 // Create new user
 checker.add("--- CREATE ---", () => broker.call("user.create", {
-	username: "Alice", password: "1234566", age: 21
+    username: "Alice", password: "1234566", age: 21
 }), doc => {
-	userIds[0] = doc.id;
-	console.log("Saved: ", doc);
-	return doc.id && doc.username === "Alice" && doc.password === "1234566" && doc.age === 21;
+    userIds[0] = doc.id;
+    console.log("Saved: ", doc);
+    return doc.id && doc.username === "Alice" && doc.password === "1234566" && doc.age === 21;
 });
 
 // List users
-checker.add("--- FIND ---", () => broker.call("user.find", {q: {}}), res => {
+checker.add("--- FIND ---", () => broker.call("user.find", { q: {} }), res => {
     console.log(res);
     return res.length === 1 && res[0].id.toString() === userIds[0].toString();
 });
 
 // Update user
-checker.add("--- UPDATE ---", () => broker.call("user.update", {id: userIds[0], username: "AliceUpdated"}), res => {
+checker.add("--- UPDATE ---", () => broker.call("user.update", { id: userIds[0], username: "AliceUpdated" }), res => {
     console.log(res);
     return res.id.toString() === userIds[0].toString();
 });
@@ -96,7 +95,7 @@ checker.add("--- COUNT ---", () => broker.call("user.count"), res => {
 });
 
 // Remove user
-checker.add("--- REMOVE ---", () => broker.call("user.remove", {id: userIds[0]}), res => {
+checker.add("--- REMOVE ---", () => broker.call("user.remove", { id: userIds[0] }), res => {
     console.log(res);
     return res.id.toString() === userIds[0].toString();
 });
