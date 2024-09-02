@@ -1,4 +1,7 @@
-# ![moleculer](https://camo.githubusercontent.com/ec4bc4b38405ab01741c0a8dbed6a6a80431c0c1d1727eb0ff36f4b8831654fa/687474703a2f2f6d6f6c6563756c65722e73657276696365732f696d616765732f62616e6e65722e706e67)
+# ![moleculer](https://github.com/moleculerjs/moleculer/blob/master/docs/assets/logo.png)
+
+![NPM Version](https://img.shields.io/npm/v/moleculer-db-adapter-scylla)  ![NPM Downloads](https://img.shields.io/npm/dm/moleculer-db-adapter-scylla)  ![NPM Unpacked Size](https://img.shields.io/npm/unpacked-size/moleculer-db-adapter-scylla)
+
 
 # ScyllaDB Adapter for MoleculerJS
 
