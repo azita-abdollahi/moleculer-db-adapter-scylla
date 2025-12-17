@@ -38,6 +38,8 @@ class ScyllaDbAdapter {
             ormOptions: this.opts.ormOptions
         });
 
+        this.client.initAsync();
+        
         // Define a model using the client.loadSchema method and the schema
         this.model = this.client.loadSchema(this.modelName, this.schema);
 

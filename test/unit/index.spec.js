@@ -162,9 +162,9 @@ describe('ScyllaDbAdapter', () => {
  
       it("should throw an error for unsupported full-text search", async () => {
          const filters = { search: "Alice" };
-         adapter.find.mockImplementation(() => {
-             throw new Error('Full-text search is not supported in ScyllaDB');
-         });
+         
+         adapter.find.mockRejectedValue(new Error('Full-text search is not supported in ScyllaDB'));
+         
          await expect(adapter.find(filters)).rejects.toThrow('Full-text search is not supported in ScyllaDB');
       });
  
