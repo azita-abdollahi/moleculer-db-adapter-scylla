@@ -14,6 +14,13 @@ The **ScyllaDB Adapter for MoleculerJS** is a powerful and efficient adapter tha
 
 This adapter is built using the [express-cassandra](https://express-cassandra.readthedocs.io/en/latest/) package, which simplifies interactions with Cassandra and ScyllaDB.
 
+## Requirements
+
+- Node.js ≥ 18
+- `moleculer` 0.14.x or 0.15.x
+- `moleculer-db` 0.8.x or 0.9.x
+- A ScyllaDB server with password authentication enabled
+
 ## Features
 
 - **CRUD Operations**: Easily perform Create, Read, Update, and Delete operations on your ScyllaDB collections.
@@ -43,14 +50,7 @@ const scyllaOptions = {
     contactPoints: ["127.0.0.1"],
     localDataCenter: "datacenter1",
     keyspace: "test",
-    authProvider: { username: "cassandra", password: "cassandra" },
-    ormOptions: {
-        defaultReplicationStrategy: {
-            class: 'SimpleStrategy',
-            replication_factor: 1
-        },
-        migration: 'safe'
-    }
+    authProvider: { username: "admin", password: "admin" }
 };
 
 const adapter = new ScyllaDbAdapter(scyllaOptions);
@@ -63,6 +63,7 @@ broker.createService({
     adapter: adapter,
     model: users,
     settings: {
+        idField: "id" 
         // Define any additional settings here
     },
 });
@@ -79,36 +80,34 @@ broker.start()
 
 ## Options
 
-**Example with scylla options**
+| Option            | Required | Default                          | Description                                                  |
+| ----------------- | -------- | -------------------------------- | ------------------------------------------------------------ |
+| `contactPoints`   | yes      | —                                | Array of hostnames/IPs                                       |
+| `localDataCenter` | yes      | —                                | Datacenter name known to the driver (ScyllaDB default: `datacenter1`) |
+| `keyspace`        | yes      | —                                | Keyspace to use                                              |
+| `authProvider`    | yes      | —                                | `{ username, password }`                                     |
+| `port`            | no       | `9042`                           | CQL port                                                     |
+| `consistency`     | no       | `one`                            | Default consistency level (e.g. `one`, `quorum`, ...)        |
+| `ormOptions`      | no       |  RF 1 / `migration: "safe"`      | Passed to express-cassandra                                  |
 
-```js
-const scyllaOptions = {
-    contactPoints: ["127.0.0.1"],
-    localDataCenter: "datacenter1",
-    keyspace: "test",
-    authProvider: { username: "cassandra", password: "cassandra" },
-    ormOptions: {
-        defaultReplicationStrategy: {
-            class: 'SimpleStrategy',
-            replication_factor: 1
-        },
-        migration: 'safe'
-    }
-};
+`ormOptions.defaultReplicationStrategy` is only consulted when the keyspace**does not exist yet** — the ORM then creates it. The default is:
 
-const adapter = new ScyllaDbAdapter(scyllaOptions);
+```javascript
+ormOptions: {    
+    defaultReplicationStrategy: {        
+        class: "NetworkTopologyStrategy",        
+        replication_factor: 1    
+    },    
+    migration: "safe"
+}
 ```
 
 ## Testing
 
 ```bash 
-$ npm test 
-```
-
-In development with watching
-
-```sh
-$ npm run ci
+$ npm test   #unit tests
+$ npm run test:watch    # unit tests in watch mode 
+$ npm run lint      # eslint
 ```
 
 ## Acknowledgments

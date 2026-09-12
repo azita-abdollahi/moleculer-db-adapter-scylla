@@ -19,19 +19,20 @@ const scyllaOptions = {
     contactPoints: ["127.0.0.1"],
     localDataCenter: "datacenter1",
     keyspace: "test",
-    authProvider: { username: "cassandra", password: "cassandra" },
+    authProvider: { username: "admin", password: "admin" },
     ormOptions: {
         defaultReplicationStrategy: {
-            class: 'SimpleStrategy',
-            replication_factor: 1
+        class: 'NetworkTopologyStrategy',
+        replication_factor: 1,
         },
         migration: 'safe'
     }
 };
 
 // Load user service
-broker.createService(StoreService, {
+broker.createService({
     name: "user",
+    mixins: [StoreService],
     adapter: new ScyllaAdapter(scyllaOptions),
     model: UserModel,
     afterConnected() {

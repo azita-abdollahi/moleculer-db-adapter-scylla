@@ -3,6 +3,14 @@
 const ScyllaDbAdapter = require('../../src/index'); 
 const { ServiceBroker } = require("moleculer");
 const UserModel = require('../models/users');
+const {
+    SCYLLA_HOSTNAME = "127.0.0.1",
+    SCYLLA_PORT = "9042",
+    SCYLLA_USERNAME = "admin",
+    SCYLLA_PASSWORD = "admin",
+    SCYLLA_KEYSPACE = "test",
+    SCYLLA_DATACENTER = "datacenter1"
+} = process.env;
 
 describe('ScyllaDbAdapter', () => {
    const broker = new ServiceBroker({ logger: false });
@@ -12,17 +20,15 @@ describe('ScyllaDbAdapter', () => {
    });
 
    const scyllaOptions = {
-        contactPoints: ["127.0.0.1"],
-        localDataCenter: "datacenter1",
-        keyspace: "test",
-        authProvider: { username: "cassandra", password: "cassandra" },
-        ormOptions: {
-            defaultReplicationStrategy: {
-                class: 'SimpleStrategy',
-                replication_factor: 1
-            },
-            migration: 'safe'
-        }
+    contactPoints: [SCYLLA_HOSTNAME],
+    localDataCenter: SCYLLA_DATACENTER,
+    port: parseInt(SCYLLA_PORT, 10),
+    keyspace: SCYLLA_KEYSPACE,
+    authProvider: { username: SCYLLA_USERNAME, password: SCYLLA_PASSWORD },
+    ormOptions: {
+        defaultReplicationStrategy: { class: "NetworkTopologyStrategy", replication_factor: 1 },
+        migration: "safe"
+    }
    };
 
    let adapter;

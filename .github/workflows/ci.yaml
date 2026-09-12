@@ -1,53 +1,49 @@
-name: CI test
+name: Test with ScyllaDB
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
-      matrix:
-        node-version: [20.x, 25.x]
       fail-fast: false
+      matrix:
+        node-version: [22.x, 26.x]
+    env:
+      SCYLLA_HOSTNAME: localhost
+      SCYLLA_PORT: 9042
+      SCYLLA_USERNAME: admin
+      SCYLLA_PASSWORD: admin
+      SCYLLA_KEYSPACE: test
+      SCYLLA_DATACENTER: datacenter1
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
-      
-      - name: Run ScyllaDB Action
-        uses: azita-abdollahi/scylladb-action@v1.0.0
+
+      - name: Start ScyllaDB
+        uses: azita-abdollahi/scylladb-action@v2.0.0
         with:
           host: localhost
-          keyspace: test
-          
+          # everything else (admin/admin, keyspace "test", port 9042) = action defaults
 
       - name: Install dependencies
-        run: npm install
-        
-      - name: Run project
-        env:
-          SCYLLA_HOSTNAME: localhost
-          SCYLLA_USERNAME: cassandra
-          SCYLLA_PASSWORD: cassandra
-          SCYLLA_PORT: 9042
-          SCYLLA_KEYSPACE: test
-          SCYLLA_DATACENTER: datacenter1
-          CONSISTENCY_LEVEL: QUORUM
-          SCYLLA_REPLICATION: '{"class": "SimpleStrategy", "replication_factor": 1}'
-        run: npm run dev &
+        run: npm ci        
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
       
-      - name: Run Tests
-        env:
-          SCYLLA_HOSTNAME: localhost
-          SCYLLA_USERNAME: cassandra
-          SCYLLA_PASSWORD: cassandra
-          SCYLLA_PORT: 9042
-          SCYLLA_KEYSPACE: test
-          SCYLLA_DATACENTER: datacenter1
-          CONSISTENCY_LEVEL: QUORUM
-          SCYLLA_REPLICATION: '{"class": "SimpleStrategy", "replication_factor": 1}'
-        run: npm run test &
+      - name: Example smoke test 
+        run: node examples/index.js
