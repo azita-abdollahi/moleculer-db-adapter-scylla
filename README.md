@@ -63,7 +63,6 @@ broker.createService({
     adapter: adapter,
     model: users,
     settings: {
-        idField: "id" 
         // Define any additional settings here
     },
 });
